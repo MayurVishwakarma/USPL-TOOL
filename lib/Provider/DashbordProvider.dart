@@ -52,6 +52,7 @@ class DashboardProvider extends ChangeNotifier {
   String? _userName;
   String? _broker;
   String? _selectedExhange;
+  String? _selectedSection = 'BANKNIFTY';
   // int? _selectedCompany;
   IsAutoModel? _isAutoModel;
   IsAutoModel? get isAutoModel => _isAutoModel;
@@ -82,6 +83,8 @@ class DashboardProvider extends ChangeNotifier {
   DateTime? _selectedDate;
   DateTime? get selectedDate => _selectedDate;
   String? get selectedExchange => _selectedExhange;
+  String? get selectedSection => _selectedSection;
+
   List<String> get dropdownItems => _dropdownItems;
   List<CompanyMasterModel> get allcomapny => _allcompany ?? [];
   // int? get selectedCompany => _selectedCompany;
@@ -167,11 +170,9 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   Future getUserLogFileString(BuildContext context) async {
-    final data = await GetPDFbyPath(
-      context,
-      fileName!,
-      broker!,
-    );
+    print(fileName);
+    final data =
+        await GetPDFbyPath(context, fileName!, broker!, selectedSection!);
     updatepdfString(data.replaceAll('""', ''));
   }
 
@@ -345,6 +346,34 @@ class DashboardProvider extends ChangeNotifier {
     }
   }
 
+  Future updateIsLocal(BuildContext context, int userId, int isLocal) async {
+    try {
+      final res = await updateTradeLocation(userId, isLocal);
+      if (res == true) {
+        Utils.showSnackBar(context: context, content: 'Updated Succesfully');
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool>? updateCommanMessage(BuildContext context, String? message) {
+    if (message != null) {
+      final res = updateCommanMsg(message);
+      return res;
+    }
+    return null;
+  }
+
+  Future<bool>? updateUserMessage(
+      BuildContext context, int? userId, String? message) {
+    if (message != null) {
+      final res = updateUserMsg(userId!, msg: message);
+      return res;
+    }
+    return null;
+  }
+
   updateCompanyListData(List<CompanyMasterModel> list) {
     _allcompany = list;
     notifyListeners();
@@ -353,6 +382,11 @@ class DashboardProvider extends ChangeNotifier {
   getCompanyList() async {
     final data = await getAllCompanyList();
     updateCompanyListData(data);
+  }
+
+  updateSelectedSecrionType(String? result) {
+    _selectedSection = result;
+    notifyListeners();
   }
 
   Future<void> selectDateNow(BuildContext context) async {

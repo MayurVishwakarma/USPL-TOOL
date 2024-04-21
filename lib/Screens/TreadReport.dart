@@ -1016,6 +1016,275 @@ class _TradeReportScreenState extends State<TradeReportScreen> {
             ],
           ),
         );
+      case 'EQUITY':
+        return Container(
+          // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            children: [
+              Column(
+                children: [
+                  SizedBox(
+                    height: 70,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: CustomTextField(
+                          nameController: fromDateController,
+                          name: "From Date",
+                          readOnly: true,
+                          onTap: () async {
+                            final result = await tdp.showCustomDatePicker(
+                                context,
+                                isFirstDate: true); //isFirstDate: true
+                            if (result != null) {
+                              toDateController.text =
+                                  DateFormat('dd-MM-yyyy').format(tdp.toDate!);
+                              fromDateController.text = result;
+                            }
+                          },
+                        )),
+                        Expanded(
+                          child: CustomTextField(
+                            nameController: toDateController,
+                            name: "To Date",
+                            readOnly: true,
+                            onTap: () async {
+                              final result =
+                                  await tdp.showCustomDatePicker(context);
+                              if (result != null) {
+                                toDateController.text = result;
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    width: MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          if (fromDateController.text.isNotEmpty &&
+                              toDateController.text.isNotEmpty) {
+                            noOfDays = countSelectedDates();
+                            tdp.updateBalnce(100000);
+                            tdp.getEquityTradeHistoryList(context);
+                          } else {
+                            Utils.showSnackBar(
+                                context: context,
+                                content: "Please select Date");
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.deepOrange,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6))),
+                        child: const Text("Search")),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              /*SizedBox(
+                height: 70,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: CustomTextField(
+                      nameController: fromDateController,
+                      name: "From Date",
+                      readOnly: true,
+                      onTap: () async {
+                        final result = await tdp.showCustomDatePicker(context,
+                            isFirstDate: true); //isFirstDate: true
+                        if (result != null) {
+                          toDateController.text =
+                              DateFormat('dd-MM-yyyy').format(tdp.toDate!);
+                          fromDateController.text = result;
+                        }
+                      },
+                    )),
+                    Expanded(
+                      child: CustomTextField(
+                        nameController: toDateController,
+                        name: "To Date",
+                        readOnly: true,
+                        onTap: () async {
+                          final result =
+                              await tdp.showCustomDatePicker(context);
+                          if (result != null) {
+                            toDateController.text = result;
+                          }
+                        },
+                      ),
+                    ),
+                    Container(
+                        width: 50,
+                        height: 70,
+                        padding: const EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.white)),
+                        child: IconButton(
+                            onPressed: () async {
+                              if (fromDateController.text.isNotEmpty &&
+                                  toDateController.text.isNotEmpty) {
+                                noOfDays = countSelectedDates();
+                                tdp.updateBalnce(100000);
+                                tdp.getEquityTradeHistoryList(context);
+                              } else {
+                                Utils.showSnackBar(
+                                    context: context,
+                                    content: "Please select Date");
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            )))
+                  ],
+                ),
+              ),
+             */
+              if (tdp.tradeHistoryModelList.isEmpty) const EmptyWidget(),
+              if (tdp.isLoading)
+                const Expanded(
+                    child: Center(child: CircularProgressIndicator())),
+              if (!tdp.isLoading)
+                Expanded(
+                  child: ScrollbarTheme(
+                    data: ScrollbarThemeData(
+                      thumbColor: MaterialStateProperty.all(
+                          Colors.deepOrange), // Set the color you desire
+                    ),
+                    child: Scrollbar(
+                      thumbVisibility: true,
+                      controller: _firstController,
+                      thickness: 10,
+                      trackVisibility: true,
+                      interactive: true,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        controller: _firstController,
+                        itemCount: tdp.tradeHistoryModelList.length,
+                        itemBuilder: (context, index) {
+                          return PLReportContainer(
+                            tradeHistoryModel: tdp.tradeHistoryModelList[index],
+                            balenceAmount: tdp
+                                .getRemainingAmount(
+                                    tdp.tradeHistoryModelList, index)
+                                .toDouble(),
+                          ); //PLReportContainer(tradeHistoryModel:tdp.tradeHistoryModelList[index],);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              if (!tdp.isLoading)
+                Column(
+                  children: [
+                    const Divider(),
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      margin: const EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                          color: ColorManager.balck255,
+                          borderRadius: BorderRadius.circular(12)
+                          // border: const Border(
+                          //   top: BorderSide(color: Colors.white, width: 2),
+                          // ),
+                          ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Text(
+                                "Total P&L : ",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white),
+                              ),
+                              Text(
+                                "${tdp.getTotalPL().toStringAsFixed(2)} ₹",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: (tdp.getTotalPL().isNegative)
+                                        ? Colors.red
+                                        : Colors.green),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Row(
+                                children: [
+                                  const Text(
+                                    "Total Points : ",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.white),
+                                  ),
+                                  Text(
+                                    tdp.getTotalPointsGain().toStringAsFixed(2),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: (tdp
+                                                .getTotalPointsGain()
+                                                .isNegative)
+                                            ? Colors.red
+                                            : Colors.green),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "Avg point per day : ",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 12,
+                                        color: Colors.white),
+                                  ),
+                                  Text(
+                                    (tdp.getTotalPointsGain() / noOfDays)
+                                        .toStringAsFixed(2),
+                                    style: TextStyle(
+                                        // fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                        color: ((tdp.getTotalPointsGain() /
+                                                    noOfDays)
+                                                .isNegative)
+                                            ? Colors.red
+                                            : Colors.green),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    // SummryContainer(
+                    //   tradeHistoryModel: tdp.tradeHistoryModelList,
+                    //   balenceAmount: tdp.getTotalPL().toDouble(),
+                    // )
+                  ],
+                ),
+            ],
+          ),
+        );
+
       default:
         return Center(
           child: Text(

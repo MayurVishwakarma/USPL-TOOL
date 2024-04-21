@@ -32,6 +32,161 @@ class _UserLogSreenState extends State<UserLogSreen> {
         body: Column(
       children: [
         Padding(
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+          child: SizedBox(
+            height: 35,
+            child: Row(
+              children: [
+                Expanded(
+                  child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            dp.updateSelectedSecrionType('BANKNIFTY');
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                color: dp.selectedSection == 'BANKNIFTY'
+                                    ? Colors.deepOrange
+                                    : null,
+                                border: dp.selectedSection != 'BANKNIFTY'
+                                    ? Border.all(color: Colors.white)
+                                    : null,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Center(
+                              child: Text(
+                                'BANKNIFTY',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            dp.updateSelectedSecrionType('NIFTY');
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                color: dp.selectedSection == 'NIFTY'
+                                    ? Colors.deepOrange
+                                    : null,
+                                border: dp.selectedSection != 'NIFTY'
+                                    ? Border.all(color: Colors.white)
+                                    : null,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Center(
+                              child: Text(
+                                'NIFTY',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            dp.updateSelectedSecrionType('NIFTY-FIN');
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                color: dp.selectedSection == 'NIFTY-FIN'
+                                    ? Colors.deepOrange
+                                    : null,
+                                border: dp.selectedSection != 'NIFTY-FIN'
+                                    ? Border.all(color: Colors.white)
+                                    : null,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Center(
+                              child: Text(
+                                'NIFTY-FIN',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            dp.updateSelectedSecrionType('MID-CAP');
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                color: dp.selectedSection == 'MID-CAP'
+                                    ? Colors.deepOrange
+                                    : null,
+                                border: dp.selectedSection != 'MID-CAP'
+                                    ? Border.all(color: Colors.white)
+                                    : null,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Center(
+                              child: Text(
+                                'MID-CAP',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            dp.updateSelectedSecrionType('STOCK');
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                color: dp.selectedSection == 'STOCK'
+                                    ? Colors.deepOrange
+                                    : null,
+                                border: dp.selectedSection != 'STOCK'
+                                    ? Border.all(color: Colors.white)
+                                    : null,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Center(
+                              child: Text(
+                                'STOCK OPTIONS',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            dp.updateSelectedSecrionType('EQUITY');
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                color: dp.selectedSection == 'EQUITY'
+                                    ? Colors.deepOrange
+                                    : null,
+                                border: dp.selectedSection != 'EQUITY'
+                                    ? Border.all(color: Colors.white)
+                                    : null,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: const Center(
+                              child: Text(
+                                'EQUITY',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        )
+                      ]),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
           padding: const EdgeInsets.all(15.0),
           child: Row(
             children: [
@@ -107,13 +262,13 @@ class _UserLogSreenState extends State<UserLogSreen> {
                 labelText: 'Select Date',
                 controller: _dateController,
                 onTap: () {
-                  dp.selectDateNow(context).whenComplete(() => {
-                        if (dp.selectedDate != null)
-                          {
-                            _dateController.text = DateFormat('yyyy-MM-dd')
-                                .format(dp.selectedDate!)
-                          }
-                      });
+                  dp.selectDateNow(context).whenComplete(() {
+                    if (dp.selectedDate != null) {
+                      _dateController.text =
+                          DateFormat('yyyy-MM-dd').format(dp.selectedDate!);
+                    }
+                    ;
+                  });
                 },
               ),
               const SizedBox(

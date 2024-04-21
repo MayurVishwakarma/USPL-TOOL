@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uspltool/Models/api_data_model.dart';
 import 'package:uspltool/Models/trade_api_data.dart';
+import 'package:uspltool/Models/trade_api_data_equity.dart';
 import 'package:uspltool/Models/trade_history_model.dart';
 import 'package:uspltool/Services/api_services.dart';
 
@@ -192,6 +193,26 @@ class TradeBookProvider extends ChangeNotifier {
     var totalbalance = ((investment + balance) - investment);
     var result = (totalbalance / investment) * 100;
     return result;
+  }
+
+  getEquityTradeHistoryList(BuildContext context) async {
+    updateIsLoading(true);
+    var apiData = await getEquityTradeApiDAta();
+    if (context.mounted && apiData != null) {
+      final result = await getEquityPLReports(apiData);
+      if (result != null) {
+        updatePLReportList(result);
+      }
+    }
+    updateIsLoading(false);
+  }
+
+  Future<EquityTradeApiData?> getEquityTradeApiDAta() async {
+    return EquityTradeApiData(
+      userId: '1',
+      fromDate: fromDate ?? getFirstDate(),
+      toDate: toDate ?? DateTime.now(),
+    );
   }
 
   updateBalnce(num result) {

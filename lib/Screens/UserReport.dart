@@ -10,6 +10,8 @@ import 'package:printing/printing.dart';
 import 'package:path_provider_windows/path_provider_windows.dart';
 import 'package:uspltool/Provider/DashbordProvider.dart';
 import 'package:uspltool/Widgets/UserDetailsTile.dart';
+import 'package:uspltool/Widgets/utils.dart';
+import 'package:uspltool/utils/color_manager.dart';
 
 class UserReportScren extends StatefulWidget {
   const UserReportScren({super.key});
@@ -27,6 +29,7 @@ class _UserReportScrenState extends State<UserReportScren> {
   }
 
   TextEditingController searchController = TextEditingController();
+  TextEditingController _message = TextEditingController();
 
   Future<void> exportToPdf() async {
     final dp = Provider.of<DashboardProvider>(context, listen: false);
@@ -308,6 +311,48 @@ class _UserReportScrenState extends State<UserReportScren> {
                   style: const TextStyle(color: Colors.white),
                 ),
               ),
+              InkWell(
+                onTap: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return _userMessage(
+                        context,
+                      );
+                    },
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: ColorManager.balck255,
+                        borderRadius: BorderRadius.circular(5)),
+                    padding: const EdgeInsets.all(5),
+                    child: const Row(
+                      children: [
+                        Text(
+                          "Info",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.info_outline_rounded,
+                          color: Colors.white,
+                        )
+                        // SvgPicture.asset(
+                        //   'assets/images/printicon.svg',
+                        //   color: Colors.white,
+                        //   height: 25,
+                        // )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
               /*Row(
                 children: [
                   InkWell(
@@ -407,6 +452,142 @@ class _UserReportScrenState extends State<UserReportScren> {
         ],
       ),
     ));
+  }
+
+  Widget _userMessage(BuildContext context) {
+    final cp = Provider.of<DashboardProvider>(context);
+    return AlertDialog(
+      title: const Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Text('Upload Message'),
+      ),
+      content: Form(
+        key: GlobalKey(),
+        child: Consumer<DashboardProvider>(
+          builder: (context, dp, child) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Expanded(
+                        child: TextFormField(
+                          controller: _message,
+                          style: const TextStyle(color: Colors.black),
+                          cursorColor: Colors.deepOrange,
+                          decoration: InputDecoration(
+                            labelText: "Message",
+                            labelStyle: const TextStyle(color: Colors.black),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black)),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            if (_message.text.isNotEmpty) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Update'),
+                    content: const Text("Are you sure"),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            cp
+                                .updateCommanMessage(context, _message.text)
+                                ?.then((value) async {
+                              await Utils.showSnackBar(
+                                  content: "update successfully!",
+                                  context: context,
+                                  color: Colors.green);
+
+                              _message.clear();
+
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            });
+                          },
+                          child: const Text('Sure')),
+                      TextButton(
+                          onPressed: () {
+                            _message.clear();
+
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'))
+                    ],
+                  );
+                },
+              );
+            } else {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Update'),
+                    content: const Text("Blank message can not be updated"),
+                    actions: [
+                      /*TextButton(
+                          onPressed: () {
+                            cp
+                                .updateUserMessage(context,
+                                    widget.userdata.userId, _message.text)
+                                ?.then((value) async {
+                              await Utils.showSnackBar(
+                                  content: "update successfully!",
+                                  context: context,
+                                  color: Colors.green);
+
+                              _message.clear();
+
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            });
+                          },
+                          child: const Text('Sure')),
+                     */
+                      TextButton(
+                          onPressed: () {
+                            _message.clear();
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'))
+                    ],
+                  );
+                },
+              );
+            }
+          },
+          child: const Text("Update"),
+        ),
+        TextButton(
+          onPressed: () {
+            _message.clear();
+            Navigator.of(context).pop(); // Close the dialog
+          },
+          child: const Text("Cancel"),
+        ),
+      ],
+    );
   }
 
   List<String> _pwbuildHeader() {

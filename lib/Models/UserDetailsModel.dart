@@ -10,6 +10,7 @@ class UserDetailsModel {
   String? deviceId;
   String? subscriptionDate;
   int? isAuto;
+  int? islocal;
   int? isNiftyOn;
   int? isFinNiftyOn;
   int? isMidCapOn;
@@ -21,6 +22,7 @@ class UserDetailsModel {
   String? mIDCAP;
   String? eQUITY;
   String? firstName;
+  String? message;
 
   UserDetailsModel(
       {this.userId,
@@ -34,6 +36,7 @@ class UserDetailsModel {
       this.deviceId,
       this.subscriptionDate,
       this.isAuto,
+      this.islocal,
       this.isNiftyOn,
       this.isFinNiftyOn,
       this.isMidCapOn,
@@ -44,7 +47,8 @@ class UserDetailsModel {
       this.nIFTYFIN,
       this.mIDCAP,
       this.eQUITY,
-      this.firstName});
+      this.firstName,
+      this.message});
 
   UserDetailsModel.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
@@ -58,6 +62,7 @@ class UserDetailsModel {
     deviceId = json['DeviceId'];
     subscriptionDate = json['SubscriptionDate'];
     isAuto = json['isAuto'];
+    islocal = json['islocal'];
     isNiftyOn = json['isNiftyOn'];
     isFinNiftyOn = json['isFinNiftyOn'];
     isMidCapOn = json['isMidCapOn'];
@@ -69,6 +74,7 @@ class UserDetailsModel {
     mIDCAP = json['MIDCAP'];
     eQUITY = json['EQUITY'];
     firstName = json['FirstName'];
+    message = json['Message'];
   }
 
   Map<String, dynamic> toJson() {
@@ -84,6 +90,7 @@ class UserDetailsModel {
     data['DeviceId'] = this.deviceId;
     data['SubscriptionDate'] = this.subscriptionDate;
     data['isAuto'] = this.isAuto;
+    data['islocal'] = this.islocal;
     data['isNiftyOn'] = this.isNiftyOn;
     data['isFinNiftyOn'] = this.isFinNiftyOn;
     data['isMidCapOn'] = this.isMidCapOn;
@@ -95,6 +102,7 @@ class UserDetailsModel {
     data['MIDCAP'] = this.mIDCAP;
     data['EQUITY'] = this.eQUITY;
     data['FirstName'] = this.firstName;
+    data['Message'] = this.message;
     return data;
   }
 }

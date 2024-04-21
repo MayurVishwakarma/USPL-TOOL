@@ -8,8 +8,8 @@ import 'package:uspltool/utils/theme_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-WidgetsFlutterBinding.ensureInitialized();  
-runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -29,8 +29,17 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         onGenerateRoute: RouteGenerator.onGenerateRoute,
         theme: ThemeManager().lightThemeData.copyWith(
-            textTheme:
-                GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)),
+              textTheme: GoogleFonts.poppinsTextTheme(
+                  Theme.of(context).textTheme.copyWith(
+                        bodyMedium: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        bodyLarge: const TextStyle(color: Colors.black),
+                        bodySmall: const TextStyle(
+                          color: Colors.black,
+                        ),
+                      )),
+            ),
       ),
     );
   }

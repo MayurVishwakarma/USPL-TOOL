@@ -11,6 +11,7 @@ import 'package:uspltool/Models/TradeDataModel.dart';
 import 'package:uspltool/Models/UserDetailsModel.dart';
 import 'package:uspltool/Models/api_data_model.dart';
 import 'package:uspltool/Models/trade_api_data.dart';
+import 'package:uspltool/Models/trade_api_data_equity.dart';
 import 'package:uspltool/Models/trade_history_model.dart';
 
 const TOKEN =
@@ -228,14 +229,44 @@ Future<bool> updateAutoTrade(Map<String, dynamic> body) async {
   }
 }
 
-Future<String> GetPDFbyPath(
-    BuildContext context, String filename, String broker) async {
+Future<List<TradeHistoryModel>?> getEquityPLReports(
+    EquityTradeApiData apiData) async {
+  try {
+    var headers = {'Content-Type': 'application/json'};
+    var data = apiData;
+    var dio = Dio();
+    var response = await dio.request(
+      'http://bn.usplbot.com/getEquityTrade/$TOKEN',
+      options: Options(
+        method: 'GET',
+        headers: headers,
+      ),
+      data: data,
+    );
+
+    if (response.statusCode == 200) {
+      // print(json.encode(response.data));
+      final list = (response.data['data'] as List)
+          .map((e) => TradeHistoryModel.fromJson(e))
+          .toList();
+
+      return list;
+    } else {}
+    return [];
+  } catch (e) {
+    print(e);
+    throw Exception('Failed to load API');
+  }
+}
+
+Future<String> GetPDFbyPath(BuildContext context, String filename,
+    String broker, String section) async {
   String pdf64base = "";
   try {
     var request = http.Request(
         'GET',
         Uri.parse(
-            'http://65.109.34.110:3006/api/Image/GetImage?imgPath=C:\\USPL\\$broker\\Logs\\${filename}.txt'));
+            'http://65.109.34.110:3006/api/Image/GetImage?imgPath=C:\\USPL\\AutoTradeLogic\\$section\\$broker\\Logs\\${filename}.txt'));
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
@@ -346,6 +377,75 @@ Future<bool> insertCompanyDetails(
         headers: headers,
       ),
       data: data,
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    print(e);
+    throw Exception('Failed to load API');
+  }
+}
+
+Future<bool> updateTradeLocation(int userId, int isLocal) async {
+  try {
+    var headers = {'Content-Type': 'application/json'};
+
+    var dio = Dio();
+    var response = await dio.request(
+      'http://bn.usplbot.com/location/$TOKEN/$userId/$isLocal',
+      options: Options(
+        method: 'PUT',
+        headers: headers,
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    print(e);
+    throw Exception('Failed to load API');
+  }
+}
+
+Future<bool> updateCommanMsg(String msg) async {
+  try {
+    var headers = {'Content-Type': 'application/json'};
+
+    var dio = Dio();
+    var response = await dio.request(
+      'http://bn.usplbot.com/common_message/$TOKEN/$msg',
+      options: Options(
+        method: 'PUT',
+        headers: headers,
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    print(e);
+    throw Exception('Failed to load API');
+  }
+}
+
+Future<bool> updateUserMsg(int userId, {String? msg = ' '}) async {
+  try {
+    var headers = {'Content-Type': 'application/json'};
+
+    var dio = Dio();
+    var response = await dio.request(
+      'http://bn.usplbot.com/user_message/$TOKEN/$userId/$msg',
+      options: Options(
+        method: 'PUT',
+        headers: headers,
+      ),
     );
 
     if (response.statusCode == 200) {
