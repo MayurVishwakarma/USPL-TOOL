@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field, use_build_context_synchronously, unused_element
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
@@ -56,7 +57,9 @@ class _UserDetailTileState extends State<UserDetailTile> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.userdata.name ?? '',
+                (widget.userdata.name!.length >= 18)
+                    ? widget.userdata.firstName ?? ''
+                    : widget.userdata.name ?? '',
                 style: const TextStyle(fontSize: 14, color: Colors.white),
               ),
               Row(
@@ -96,385 +99,351 @@ class _UserDetailTileState extends State<UserDetailTile> {
                                 children: [
                                   const Text(
                                     "Update User Details",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  const SizedBox(
-                                    height: 20,
+                                  Text(
+                                    'Name: ${widget.userdata.name}',
+                                    style: const TextStyle(fontSize: 10),
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Name: ${widget.userdata.name}',
-                                        style: const TextStyle(fontSize: 14),
-                                      ),
-                                      Text(
-                                        'Broker: ${widget.userdata.broker}',
-                                        style: const TextStyle(fontSize: 14),
-                                      ),
-                                    ],
+                                  Text(
+                                    'Broker: ${widget.userdata.broker}',
+                                    style: const TextStyle(fontSize: 10),
                                   ),
                                 ],
                               ),
                             ),
-                            content: SizedBox(
-                              // height: MediaQuery.of(context).size.height * 0.35,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: ListView(
-                                shrinkWrap: true,
-                                children: [
-                                  Form(
-                                      key: GlobalKey(),
-                                      child: Consumer<DashboardProvider>(
-                                          builder: (context, dp, child) {
-                                        return Table(
-                                          children: [
-                                            const TableRow(children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8),
-                                                child: Text(
-                                                  "Segments",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8),
-                                                child: Text(
-                                                  "% Allocation",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8),
-                                                child: Text(
-                                                  "Auto Trade",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 18),
-                                                  textAlign: TextAlign.right,
-                                                ),
-                                              ),
-                                            ]),
-                                            const TableRow(children: [
-                                              Divider(),
-                                              Divider(),
-                                              Divider()
-                                            ]),
-                                            //*BankNifty
-                                            TableRow(children: [
-                                              const Text(
-                                                "Bank Nifty",
-                                                style: TextStyle(fontSize: 18),
-                                              ),
-                                              SizedBox(
-                                                width: 30,
-                                                height: 40,
-                                                child: TextField(
-                                                  controller: _banknifty,
-                                                  onChanged: (val) {
-                                                    widget.userdata.bANKNIFTY =
-                                                        val;
-                                                  },
-                                                  textAlign: TextAlign.center,
-                                                  decoration: const InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      suffix: Text('%')),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Switch.adaptive(
-                                                  activeColor: Colors.green,
-                                                  inactiveThumbColor:
-                                                      Colors.red,
-                                                  value: dp.getTrueFalse(
-                                                      _isBankNiftyOn),
-                                                  onChanged: (val) {
-                                                    dp.updateIsAutoModel(dp
-                                                        .isAutoModel!
-                                                        .copyWith(
-                                                            bnIsAuto:
-                                                                val ? 1 : 0));
-                                                    _isBankNiftyOn =
-                                                        val == true ? 1 : 0;
-                                                  },
-                                                ),
-                                              )
-                                            ]),
-                                            const TableRow(children: [
-                                              Divider(),
-                                              Divider(),
-                                              Divider()
-                                            ]),
-                                            //*Nifty
-                                            TableRow(children: [
-                                              const Text(
-                                                "Nifty",
-                                                style: TextStyle(fontSize: 18),
-                                              ),
-                                              SizedBox(
-                                                width: 30,
-                                                height: 40,
-                                                child: TextField(
-                                                  controller: _nifty,
-                                                  onChanged: (val) {
-                                                    widget.userdata.nIFTY = val;
-                                                  },
-                                                  textAlign: TextAlign.center,
-                                                  decoration: const InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      suffix: Text('%')),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Switch.adaptive(
-                                                  activeColor: Colors.green,
-                                                  inactiveThumbColor:
-                                                      Colors.red,
-                                                  value: dp
-                                                      .getTrueFalse(_isNiftyOn),
-                                                  onChanged: (value) {
-                                                    dp.updateIsAutoModel(dp
-                                                        .isAutoModel!
-                                                        .copyWith(
-                                                            nIsAuto:
-                                                                value ? 1 : 0));
-                                                    _isNiftyOn =
-                                                        value == true ? 1 : 0;
-                                                    // dp.updateNiftyAuto(value);
-                                                  },
-                                                ),
-                                              )
-                                            ]),
-                                            const TableRow(children: [
-                                              Divider(),
-                                              Divider(),
-                                              Divider()
-                                            ]),
-                                            //*FinNifty
-                                            TableRow(children: [
-                                              const Text(
-                                                "Nifty Fin",
-                                                style: TextStyle(fontSize: 18),
-                                              ),
-                                              SizedBox(
-                                                width: 30,
-                                                height: 40,
-                                                child: TextField(
-                                                  controller: _finnifty,
-                                                  onChanged: (val) {
-                                                    widget.userdata.nIFTYFIN =
-                                                        val;
-                                                  },
-                                                  textAlign: TextAlign.center,
-                                                  decoration: const InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      suffix: Text('%')),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Switch.adaptive(
-                                                  activeColor: Colors.green,
-                                                  inactiveThumbColor:
-                                                      Colors.red,
-                                                  value: dp.getTrueFalse(
-                                                      _isFinNiftyOn),
-                                                  onChanged: (value) {
-                                                    dp.updateIsAutoModel(dp
-                                                        .isAutoModel!
-                                                        .copyWith(
-                                                            nfIsAuto:
-                                                                value ? 1 : 0));
-                                                    _isFinNiftyOn =
-                                                        value == true ? 1 : 0;
-                                                  },
-                                                ),
-                                              )
-                                            ]),
-                                            const TableRow(children: [
-                                              Divider(),
-                                              Divider(),
-                                              Divider()
-                                            ]),
-                                            //*MidCap
-                                            TableRow(children: [
-                                              const Text(
-                                                "Midcap",
-                                                style: TextStyle(fontSize: 18),
-                                              ),
-                                              SizedBox(
-                                                width: 30,
-                                                height: 40,
-                                                child: TextField(
-                                                  controller: _midcap,
-                                                  textAlign: TextAlign.center,
-                                                  onChanged: (val) {
-                                                    widget.userdata.mIDCAP =
-                                                        val;
-                                                  },
-                                                  decoration: const InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      suffix: Text('%')),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Switch.adaptive(
-                                                  activeColor: Colors.green,
-                                                  inactiveThumbColor:
-                                                      Colors.red,
-                                                  value: dp.getTrueFalse(
-                                                      _isMidCapOn),
-                                                  onChanged: (value) {
-                                                    dp.updateIsAutoModel(dp
-                                                        .isAutoModel!
-                                                        .copyWith(
-                                                            mcIsAuto:
-                                                                value ? 1 : 0));
-                                                    _isMidCapOn =
-                                                        value == true ? 1 : 0;
-                                                  },
-                                                ),
-                                              )
-                                            ]),
-                                            const TableRow(children: [
-                                              Divider(),
-                                              Divider(),
-                                              Divider()
-                                            ]),
-                                            //*Equity
-                                            TableRow(children: [
-                                              const Text(
-                                                "Equity",
-                                                style: TextStyle(fontSize: 18),
-                                              ),
-                                              SizedBox(
-                                                width: 30,
-                                                height: 40,
-                                                child: TextField(
-                                                  controller: _equity,
-                                                  onChanged: (val) {
-                                                    widget.userdata.eQUITY =
-                                                        val;
-                                                  },
-                                                  textAlign: TextAlign.center,
-                                                  decoration: const InputDecoration(
-                                                      focusedBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      enabledBorder:
-                                                          OutlineInputBorder(
-                                                              borderSide:
-                                                                  BorderSide
-                                                                      .none),
-                                                      suffix: Text('%')),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Switch.adaptive(
-                                                  activeColor: Colors.green,
-                                                  inactiveThumbColor:
-                                                      Colors.red,
-                                                  value: dp.getTrueFalse(
-                                                      _isEquityOn),
-                                                  onChanged: (value) {
-                                                    dp.updateIsAutoModel(dp
-                                                        .isAutoModel!
-                                                        .copyWith(
-                                                            eqIsAuto:
-                                                                value ? 1 : 0));
-                                                    _isEquityOn =
-                                                        value == true ? 1 : 0;
-                                                  },
-                                                ),
-                                              )
-                                            ])
-                                          ],
-                                        );
-                                      })),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context)
-                                              .pop(); // Close the dialog
-                                        },
-                                        child: const Text("Cancel"),
-                                      ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          await dp.submitIsAuto(context,
-                                              widget.userdata, dp.isAutoModel!);
-                                          await dp.getUserDetailsListnew();
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text("Update"),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                            content: Form(
+                              key: GlobalKey(),
+                              child: Consumer<DashboardProvider>(
+                                builder: (context, dp, child) {
+                                  return SingleChildScrollView(
+                                    child: Table(
+                                      defaultVerticalAlignment:
+                                          TableCellVerticalAlignment.middle,
+                                      children: [
+                                        const TableRow(children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Text(
+                                              "Segments",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Text(
+                                              "% Allocation",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12,
+                                                  color: Colors.black),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8),
+                                            child: Text(
+                                              "Auto Trade",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12),
+                                              textAlign: TextAlign.right,
+                                            ),
+                                          ),
+                                        ]),
+                                        const TableRow(children: [
+                                          Divider(),
+                                          Divider(),
+                                          Divider()
+                                        ]),
+                                        //*BankNifty
+                                        TableRow(children: [
+                                          const Text(
+                                            "Bank Nifty",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                            height: 40,
+                                            child: TextField(
+                                              controller: _banknifty,
+                                              onChanged: (val) {
+                                                widget.userdata.bANKNIFTY = val;
+                                              },
+                                              textAlign: TextAlign.center,
+                                              decoration: const InputDecoration(
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide: BorderSide
+                                                              .none),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide.none),
+                                                  suffix: Text('%')),
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Switch.adaptive(
+                                              activeColor: Colors.green,
+                                              inactiveThumbColor: Colors.red,
+                                              value: dp
+                                                  .getTrueFalse(_isBankNiftyOn),
+                                              onChanged: (val) {
+                                                dp.updateIsAutoModel(
+                                                    dp.isAutoModel!.copyWith(
+                                                        bnIsAuto: val ? 1 : 0));
+                                                _isBankNiftyOn =
+                                                    val == true ? 1 : 0;
+                                              },
+                                            ),
+                                          )
+                                        ]),
+                                        const TableRow(children: [
+                                          Divider(),
+                                          Divider(),
+                                          Divider()
+                                        ]),
+                                        //*Nifty
+                                        TableRow(children: [
+                                          const Text(
+                                            "Nifty",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                            height: 40,
+                                            child: TextField(
+                                              controller: _nifty,
+                                              onChanged: (val) {
+                                                widget.userdata.nIFTY = val;
+                                              },
+                                              textAlign: TextAlign.center,
+                                              decoration: const InputDecoration(
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide: BorderSide
+                                                              .none),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide.none),
+                                                  suffix: Text('%')),
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Switch.adaptive(
+                                              activeColor: Colors.green,
+                                              inactiveThumbColor: Colors.red,
+                                              value:
+                                                  dp.getTrueFalse(_isNiftyOn),
+                                              onChanged: (value) {
+                                                dp.updateIsAutoModel(
+                                                    dp.isAutoModel!.copyWith(
+                                                        nIsAuto:
+                                                            value ? 1 : 0));
+                                                _isNiftyOn =
+                                                    value == true ? 1 : 0;
+                                                // dp.updateNiftyAuto(value);
+                                              },
+                                            ),
+                                          )
+                                        ]),
+                                        const TableRow(children: [
+                                          Divider(),
+                                          Divider(),
+                                          Divider()
+                                        ]),
+                                        //*FinNifty
+                                        TableRow(children: [
+                                          const Text(
+                                            "Nifty Fin",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                            height: 40,
+                                            child: TextField(
+                                              controller: _finnifty,
+                                              onChanged: (val) {
+                                                widget.userdata.nIFTYFIN = val;
+                                              },
+                                              textAlign: TextAlign.center,
+                                              decoration: const InputDecoration(
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide: BorderSide
+                                                              .none),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide.none),
+                                                  suffix: Text('%')),
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Switch.adaptive(
+                                              activeColor: Colors.green,
+                                              inactiveThumbColor: Colors.red,
+                                              value: dp
+                                                  .getTrueFalse(_isFinNiftyOn),
+                                              onChanged: (value) {
+                                                dp.updateIsAutoModel(
+                                                    dp.isAutoModel!.copyWith(
+                                                        nfIsAuto:
+                                                            value ? 1 : 0));
+                                                _isFinNiftyOn =
+                                                    value == true ? 1 : 0;
+                                              },
+                                            ),
+                                          )
+                                        ]),
+                                        const TableRow(children: [
+                                          Divider(),
+                                          Divider(),
+                                          Divider()
+                                        ]),
+                                        //*MidCap
+                                        TableRow(children: [
+                                          const Text(
+                                            "Midcap",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                            height: 40,
+                                            child: TextField(
+                                              controller: _midcap,
+                                              textAlign: TextAlign.center,
+                                              onChanged: (val) {
+                                                widget.userdata.mIDCAP = val;
+                                              },
+                                              decoration: const InputDecoration(
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide: BorderSide
+                                                              .none),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide.none),
+                                                  suffix: Text('%')),
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Switch.adaptive(
+                                              activeColor: Colors.green,
+                                              inactiveThumbColor: Colors.red,
+                                              value:
+                                                  dp.getTrueFalse(_isMidCapOn),
+                                              onChanged: (value) {
+                                                dp.updateIsAutoModel(
+                                                    dp.isAutoModel!.copyWith(
+                                                        mcIsAuto:
+                                                            value ? 1 : 0));
+                                                _isMidCapOn =
+                                                    value == true ? 1 : 0;
+                                              },
+                                            ),
+                                          )
+                                        ]),
+                                        const TableRow(children: [
+                                          Divider(),
+                                          Divider(),
+                                          Divider()
+                                        ]),
+                                        //*Equity
+                                        TableRow(children: [
+                                          const Text(
+                                            "Equity",
+                                            style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            width: 30,
+                                            height: 40,
+                                            child: TextField(
+                                              controller: _equity,
+                                              onChanged: (val) {
+                                                widget.userdata.eQUITY = val;
+                                              },
+                                              textAlign: TextAlign.center,
+                                              decoration: const InputDecoration(
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide: BorderSide
+                                                              .none),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                          borderSide:
+                                                              BorderSide.none),
+                                                  suffix: Text('%')),
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Switch.adaptive(
+                                              activeColor: Colors.green,
+                                              inactiveThumbColor: Colors.red,
+                                              value:
+                                                  dp.getTrueFalse(_isEquityOn),
+                                              onChanged: (value) {
+                                                dp.updateIsAutoModel(
+                                                    dp.isAutoModel!.copyWith(
+                                                        eqIsAuto:
+                                                            value ? 1 : 0));
+                                                _isEquityOn =
+                                                    value == true ? 1 : 0;
+                                              },
+                                            ),
+                                          )
+                                        ])
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
                             ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                                child: const Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  await dp.submitIsAuto(context,
+                                      widget.userdata, dp.isAutoModel!);
+                                  await dp.getUserDetailsListnew();
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text("Update"),
+                              ),
+                            ],
                           );
                         },
                       );
@@ -590,17 +559,19 @@ class _UserDetailTileState extends State<UserDetailTile> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'Name: ${widget.userdata.name}',
-                                      style: const TextStyle(fontSize: 14),
+                                      style: const TextStyle(
+                                          fontSize: 12, color: Colors.black),
                                     ),
                                     Text(
                                       'Broker: ${widget.userdata.broker}',
-                                      style: const TextStyle(fontSize: 14),
+                                      style: const TextStyle(
+                                          fontSize: 12, color: Colors.black),
                                     ),
                                   ],
                                 ),
@@ -1054,7 +1025,7 @@ class _UserDetailTileState extends State<UserDetailTile> {
                           .replaceAll('}', ''),
                       style: const TextStyle(
                         color: Colors.amber,
-                        fontSize: 12,
+                        fontSize: 9,
                       ),
                     ),
                   ),
